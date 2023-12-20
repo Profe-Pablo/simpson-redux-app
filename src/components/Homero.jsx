@@ -1,29 +1,18 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image, TextInput, Keyboard} from "react-native";
 import {useState} from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { increment,decrement,incrementByAmount,reset } from "../features/beers/beersSlice";
 
 const Homero = () => {
-  const [cervezas, setCervezas] = useState(0);
   const [amountToAdd, setAmountToAdd] = useState("")
 
-  const handleAddBeer = ()=>{
-    setCervezas(cervezas+1)
-  }
+  const cervezas = useSelector(state=>state.beersReducer.beers)
 
-  const handleRemoveBeer = ()=>{
-    if(cervezas>0){
-        setCervezas(cervezas-1)
-    } 
-  }
+  dispatch = useDispatch()
 
-  const handleAmountToAdd = () => {
-    setCervezas(cervezas+Number(amountToAdd))
-    setAmountToAdd("")
-    Keyboard.dismiss()
-  }
-
-  const handleResetBeers = () => {
-    setCervezas(0)
-    setAmountToAdd("")
+  const handleReset =() =>{
+    dispatch(reset())
+    setAmountToAdd(0)
   }
 
   return (
@@ -32,11 +21,11 @@ const Homero = () => {
             <Text style={{...styles.xlText,...styles.simpsonFont}}>Cantidad de cervezas: {cervezas}</Text>
         </View>
       <View style={styles.unitContainer}>
-        <TouchableOpacity style={styles.btn} onPress={()=>handleRemoveBeer()}>
+        <TouchableOpacity style={styles.btn} onPress={()=>dispatch(decrement())}>
             <Text style={{...styles.xlText,...styles.simpsonFont,...styles.whiteText}}>-</Text>
         </TouchableOpacity>
         <Text style={{...styles.xlText,...styles.simpsonFont}}>{cervezas}</Text>
-        <TouchableOpacity style={styles.btn} onPress={()=>handleAddBeer()}>
+        <TouchableOpacity style={styles.btn} onPress={()=>dispatch(increment())}>
             <Text style={{...styles.xlText,...styles.simpsonFont,...styles.whiteText}}>+</Text>
         </TouchableOpacity>
       </View>
@@ -49,12 +38,12 @@ const Homero = () => {
             value={amountToAdd.toString()}
             onChangeText={number=>setAmountToAdd(Number(number))}
         />
-        <TouchableOpacity onPress={()=>handleAmountToAdd()}>
+        <TouchableOpacity onPress={()=>dispatch(incrementByAmount(amountToAdd))}>
             <Text style={{...styles.xlText,...styles.simpsonFont}}>Agregar</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.resetContainer}>
-      <TouchableOpacity onPress={()=>handleResetBeers()}>
+      <TouchableOpacity onPress={()=>handleReset()}>
             <Text style={{...styles.xlText,...styles.simpsonFont,...styles.btnReset,...styles.whiteText}}>Mejor me voy a casa</Text>
         </TouchableOpacity>
       </View>

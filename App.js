@@ -1,6 +1,8 @@
 import { ActivityIndicator} from 'react-native';
 import { useFonts } from 'expo-font';
 import Taberna from "./src/screens/Taberna";
+import { Provider } from 'react-redux';
+import store from './src/store';
 
 export default function App() {
 
@@ -13,7 +15,10 @@ export default function App() {
     return <ActivityIndicator />;
   }
   return (
-    <Taberna />
+    <Provider store={store}>
+      <Taberna />
+    </Provider>
+    
   );
 }
 
